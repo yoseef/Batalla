@@ -17,37 +17,28 @@ public class Exercit {
     ArrayList<Soldat> exercit;
     Random r;
     int files;
-    double canvasWidth;
-    private boolean posDesti;
+    double canvasWidth;   
     private double puntInicial;
 
     //constructor
     public Exercit(double widthCanvas) {
         exercit = new ArrayList<>();
-        r = new Random();
-        //files = numFiles;
-        canvasWidth = widthCanvas;
-        posDesti = false;
+        r = new Random();        
+        canvasWidth = widthCanvas;        
         puntInicial = 0;
     }
 
     //getters:
+    
     public Soldat getObtenirSoldat(int pos) {
         return exercit.get(pos);
-    }
-
-    public boolean getposDesti() {
-        return posDesti;
-    }
-
+    }   
+    
     public ArrayList<Soldat> getSoldats() {
         return exercit;
     }
 
-    //setter
-    public void setposDesti(boolean value) {
-        this.posDesti = value;
-    }
+    //setter    
 
     //metodes de classe
     public void afegirSoldat(Soldat nouSoldat) {
@@ -55,59 +46,30 @@ public class Exercit {
     }
 
     /**
-     * @param numFiles
+     * @param numFiles que hihaura
      * @param pI inidica quina pos estaran dreta o esquerra
      */
-    public void formarExercit(double pI, int numFiles) {
-        puntInicial = pI;
+    public void formarExercit(int pI, int numFiles) {
+  
         int[] files = new int[numFiles];
-        int maxSoldat = exercit.size();
-        int maxSoldatFila = 5;
-        for (int i = 0; i < files.length; i++) {
-            int numAleat = r.nextInt(maxSoldatFila);
-            files[i] = numAleat;
-            maxSoldat = maxSoldat - numAleat;
+        for (int i = 0; i < exercit.size(); i++) {
+            int numAleat = r.nextInt(files.length);
+            files[numAleat] += 1;
         }
-
-        if (pI == 0) {
-            int count = 0;
-            for (int i = 0; i < files.length; i++) {
-                for (int j = 0; j < files[i]; j++) {
-                    if (count < exercit.size()) {
-                        double h = i * exercit.get(count).getHeight() + 5;
-                        double w = exercit.get(count).getWidth() * j;
-                        exercit.get(count).formar(w, h);
-                        count++;
+        int count = 0;
+        for (int i = 0; i < files.length; i++) {
+            for (int j = 0; j < files[i]; j++) {
+                if (count < exercit.size()) {
+                    double h = i * exercit.get(count).getHeight() + i * 15;
+                    double w;
+                    if (pI > 0) {
+                        w = exercit.get(count).getWidth() * j;
+                    } else {
+                        puntInicial = canvasWidth - exercit.get(count).getWidth();
+                        w = puntInicial - (exercit.get(count).getWidth() * j);
                     }
-
-                }
-            }
-            if (exercit.size() - count != 0) {
-
-                for (int i = exercit.size() - 1; i >= count; i--) {
-                    exercit.get(i).borrarImatge();
-                    exercit.remove(i);
-                }
-            }
-
-        } else {
-            int count = 0;
-            for (int i = 0; i < files.length; i++) {
-                for (int j = 0; j < files[i]; j++) {
-                    if (count < exercit.size()) {
-                        double h = i * exercit.get(count).getHeight() + 5;
-                        double w = pI - (exercit.get(count).getWidth() * j);
-                        exercit.get(count).formar(w, h);
-                        count++;
-                    }
-
-                }
-            }
-            if (exercit.size() - count != 0) {
-
-                for (int i = exercit.size() - 1; i >= count; i--) {
-                    exercit.get(i).borrarImatge();
-                    exercit.remove(i);
+                    exercit.get(count).formar(w, h);
+                    count++;
                 }
             }
         }
@@ -117,41 +79,34 @@ public class Exercit {
      *
      * @param direccioX
      */
-    public void atacar(int direccioX) {
-        /*
-         for (Soldat sd : exercit) {
-         if (!sd.getDesti()) {
-         sd.moure(direccioX, canvasWidth);
-         posDesti = false;
-         } else {
-         posDesti = true;
-         }
-         }
-         */
+    boolean hanArribat = true;
+    public boolean atacar(int direccioX) {
+        double desti;
+        int totalMoguts = 0;
         for (int i = 0; i < exercit.size(); i++) {
-            if (!exercit.get(i).getDesti()) {
-                exercit.get(i).moure(direccioX, canvasWidth);
+            if (direccioX > 0) {
+                //dreta
+                desti = canvasWidth - exercit.get(i).getWidth();
             } else {
-                posDesti = true;
+                //esquerra 
+                desti = 0;
+            }
+            totalMoguts += exercit.get(i).moure(direccioX, desti);
+            if (totalMoguts == 0) {
+                hanArribat = true;
+            } else {
+                hanArribat = false;
             }
         }
-
-    }
-
-    public void resetPosDesti() {
-        for (int i = 0; i < exercit.size(); i++) {
-            if (exercit.get(i).getDesti()) {
-                exercit.get(i).setDesti(false);
-            }
-        }
+        return hanArribat;
     }
 
     public void comprovarMorts(Exercit exercitOponent) {
         for (int i = 0; i < exercit.size(); i++) {
             for (int j = 0; j < exercitOponent.getSoldats().size(); j++) {
                 if (exercit.get(i).intersecta(exercitOponent.getSoldats().get(j))) {
-                    //exercitOponent.getObtenirSoldat(j).borrarImatge();
-                    //exercitOponent.getSoldats().remove(j);
+                    exercitOponent.getObtenirSoldat(j).borrarImatge();
+                    exercitOponent.getSoldats().remove(j);
                 }
             }
         }

@@ -17,16 +17,12 @@ public class Soldat {
 
     Random r;
     GImage img;
-    int velocitat;
-    String bandol;
-    boolean desti;
+    int velocitat;    
 
     //constructor
-    public Soldat(GImage imatge, String nomBandol) {
+    public Soldat(GImage imatge) {
         img = imatge;
-        r = new Random();
-        bandol = nomBandol;
-        desti = false;
+        r = new Random();        
     }
 
     //getters
@@ -49,37 +45,28 @@ public class Soldat {
     public GRectangle getRectangleSoldat() {
         return img.getBounds();
     }
-
-    public String getBandol() {
-        return this.bandol;
-    }
-
-    public boolean getDesti() {
-        return this.desti;
-    }
-
+    
     //setters
     private void setVelo() {
-        velocitat = r.nextInt(15);
-    }
-    public void setDesti(boolean value){
-        this.desti = value;
-    }
-
+        velocitat = r.nextInt(10);
+    }   
     //metodes de la classe
     public void formar(double x, double y) {
         img.setLocation(x, y);
+       
     }
 
-    public void moure(int direccioX, double widthCanvas) {
-        if (direccioX > 0 && img.getX() <= widthCanvas - img.getWidth()) {
+    public int moure(int direccioX, double desti) {
+        if (direccioX > 0 && img.getX() <= desti) {
             setVelo();
             img.move(direccioX * velocitat, 0);
+            return 1;
         } else if (direccioX < 0 && img.getX() >= 0) {
             setVelo();
             img.move(direccioX * velocitat, 0);
+            return 1;
         } else {
-            desti = true;
+            return 0;
         }
     }
 

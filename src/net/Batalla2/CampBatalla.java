@@ -6,7 +6,6 @@
 package net.Batalla2;
 
 import acm.graphics.GImage;
-import acm.graphics.GLine;
 import acm.program.GraphicsProgram;
 
 /**
@@ -15,72 +14,56 @@ import acm.program.GraphicsProgram;
  */
 public class CampBatalla extends GraphicsProgram {
 
-    double espaiFila;
-    GLine linia;
+    int direc = 1;
 
     public void run() {
-        this.setSize(950, 700);
-        System.out.println(this.getHeight());
+        this.setSize(800, 600);
         int numFiles = 5;
-        espaiFila = this.getHeight() / numFiles;
 
-        //dibuxar les lineas al camp:
-        for (int i = 1; i < 8; i++) {
-            linia = new GLine(0, espaiFila * i, this.getWidth(), espaiFila * i);
-            add(linia);
-        }
         Exercit romans = new Exercit(this.getWidth());
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < 10; i++) {
             GImage img = new GImage("1.png");
-            this.add(img, 0, 0);            
-            img.setSize(50, espaiFila);
-            Soldat nouSoldat = new Soldat(img, "romans");
+            this.add(img, 0, 0);
+            Soldat nouSoldat = new Soldat(img);
             romans.afegirSoldat(nouSoldat);
         }
-        romans.formarExercit(0, numFiles);
+        romans.formarExercit(direc, numFiles);
 
         Exercit mitics = new Exercit(this.getWidth());
-        for (int i = 0; i < 15; i++) {
-            GImage img = new GImage("4.png");                       
-            this.add(img, 0, 0);            
-            img.setSize(50, espaiFila);
-            Soldat nouSoldat = new Soldat(img, "mitics");
+        for (int i = 0; i < 10; i++) {
+            GImage img = new GImage("4.png");
+            this.add(img, 0, 0);
+            Soldat nouSoldat = new Soldat(img);
             mitics.afegirSoldat(nouSoldat);
         }
-        mitics.formarExercit(this.getWidth() - (int) mitics.getObtenirSoldat(0).getWidth(), numFiles);
-        int direc = 1;
-        while (romans.getSoldats().size() > 0 && mitics.getSoldats().size() > 0) {
+        mitics.formarExercit(-direc, numFiles);
 
-            if (!romans.getposDesti()) {
-                romans.atacar(direc);
-                this.pause(100);
-            } else {                
-                 if (direc == 1) {
-                 direc = -1;
-                 } else {
-                 direc = 1;
-                 }
-                 romans.setposDesti(false);
-                 romans.resetPosDesti();
-                 
+        play(romans, mitics);
+    }
+
+    public void play(Exercit romans, Exercit mitics) {
+        //int minSoldats = Math.min(romans.getSoldats().size(), mitics.getSoldats().size());
+        while (romans.getSoldats().size() > 0 && mitics.getSoldats().size() > 0) {
+            int minSoldats = Math.min(romans.getSoldats().size(), mitics.getSoldats().size());
+            boolean atakar = romans.atacar(direc);
+            if (atakar) {
+                //"Han arribat"
+                direc *= -1;
+                romans.formarExercit(direc, minSoldats);
             }
             romans.comprovarMorts(mitics);
+            
 
-            if (!mitics.getposDesti()) {
-                mitics.atacar(-direc);
-                this.pause(100);
-            } else {
-                
-                 if (direc == 1) {
-                 direc = -1;
-                 } else {
-                 direc = 1;
-                 }
-                 mitics.setposDesti(false);
-                 mitics.resetPosDesti();
-                 
+            boolean atakarOponent = mitics.atacar(-direc);
+            if (atakarOponent) {
+                //"Han arribat"
+                direc *= -1;
+                //int minSoldats = Math.min(romans.getSoldats().size(), mitics.getSoldats().size());
+                mitics.formarExercit(direc, minSoldats);
             }
             mitics.comprovarMorts(romans);
+            //minSoldats = Math.min(romans.getSoldats().size(), mitics.getSoldats().size());
+            this.pause(60);
         }
     }
 }
