@@ -14,56 +14,81 @@ import acm.program.GraphicsProgram;
  */
 public class CampBatalla extends GraphicsProgram {
 
-    int direc = 1;
+    /**
+     * direccio general que agafar l'exercit(pos inicial).
+     */
+    private final int direc = 1;
+    /**
+     * inica de quantes files constara el camp.
+     */
+    private final int numFiles = 5;
 
-    public void run() {
-        this.setSize(800, 600);
-        int numFiles = 5;
-
+    @Override
+    public final void run() {
+        this.setSize(AMPLADA, ALTURA);
         Exercit romans = new Exercit(this.getWidth());
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < N10; i++) {
             GImage img = new GImage("1.png");
             this.add(img, 0, 0);
-            Soldat nouSoldat = new Soldat(img);
-            romans.afegirSoldat(nouSoldat);
+            romans.afegirSoldat(new Soldat(img, direc));
         }
-        romans.formarExercit(direc, numFiles);
+        romans.formarExercit(numFiles);
 
         Exercit mitics = new Exercit(this.getWidth());
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < N10; i++) {
             GImage img = new GImage("4.png");
             this.add(img, 0, 0);
-            Soldat nouSoldat = new Soldat(img);
+            Soldat nouSoldat = new Soldat(img, -direc);
             mitics.afegirSoldat(nouSoldat);
         }
-        mitics.formarExercit(-direc, numFiles);
+        mitics.formarExercit(numFiles);
 
         play(romans, mitics);
     }
+    /**
+     * numero de soldats que volem tenir.
+     */
+    private static final int N10 = 10;
+    /**
+     * altura del de la finestra.
+     */
+    private static final int ALTURA = 600;
+    /**
+     * amplada de la finestra.
+     */
+    private static final int AMPLADA = 800;
 
-    public void play(Exercit romans, Exercit mitics) {
-        //int minSoldats = Math.min(romans.getSoldats().size(), mitics.getSoldats().size());
-        while (romans.getSoldats().size() > 0 && mitics.getSoldats().size() > 0) {
-            int minSoldats = Math.min(romans.getSoldats().size(), mitics.getSoldats().size());
-            boolean atakar = romans.atacar(direc);
+    /**
+     *
+     * @param roma el primer exercit
+     * @param mitics l¡exercit contrari
+     */
+    public final void play(final Exercit roma, final Exercit mitics) {
+        while (roma.getSoldats().size() > 0 && mitics.getSoldats().size() > 0) {
+            boolean atakar = roma.atacar();
             if (atakar) {
+                int minSldts = Math.min(roma.getSoldats().size(),
+                        mitics.getSoldats().size());
                 //"Han arribat"
-                direc *= -1;
-                romans.formarExercit(direc, minSoldats);
+                roma.changeDireccio();
+                roma.formarExercit(minSldts);
             }
-            romans.comprovarMorts(mitics);
-            
+            roma.comprovarMorts(mitics);
 
-            boolean atakarOponent = mitics.atacar(-direc);
+            boolean atakarOponent = mitics.atacar();
             if (atakarOponent) {
+                int minSldts = Math.min(roma.getSoldats().size(),
+                        mitics.getSoldats().size());
                 //"Han arribat"
-                direc *= -1;
-                //int minSoldats = Math.min(romans.getSoldats().size(), mitics.getSoldats().size());
-                mitics.formarExercit(direc, minSoldats);
+                mitics.changeDireccio();
+                mitics.formarExercit(minSldts);
             }
-            mitics.comprovarMorts(romans);
-            //minSoldats = Math.min(romans.getSoldats().size(), mitics.getSoldats().size());
-            this.pause(60);
+            mitics.comprovarMorts(roma);
+            this.pause(N50);
         }
     }
+    /**
+     * numero 50.
+     */
+    private static final int N50 = 50;
 }
