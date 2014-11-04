@@ -29,7 +29,7 @@ public class Exercit {
     /**
      * indica si el soldat ha arribat el desti.
      */
-    boolean hanArribat;
+    private boolean hanArribat;
 
     /**
      *
