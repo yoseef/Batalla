@@ -27,7 +27,7 @@ public class CampBatalla extends GraphicsProgram {
     public final void run() {
         this.setSize(AMPLADA, ALTURA);
         Exercit romans = new Exercit(this.getWidth());
-        for (int i = 0; i < N10; i++) {
+        for (int i = 0; i < N15; i++) {
             GImage img = new GImage("1.png");
             this.add(img, 0, 0);
             romans.afegirSoldat(new Soldat(img, direc));
@@ -35,7 +35,7 @@ public class CampBatalla extends GraphicsProgram {
         romans.formarExercit(numFiles);
 
         Exercit mitics = new Exercit(this.getWidth());
-        for (int i = 0; i < N10; i++) {
+        for (int i = 0; i < N15; i++) {
             GImage img = new GImage("4.png");
             this.add(img, 0, 0);
             Soldat nouSoldat = new Soldat(img, -direc);
@@ -48,7 +48,7 @@ public class CampBatalla extends GraphicsProgram {
     /**
      * numero de soldats que volem tenir.
      */
-    private static final int N10 = 10;
+    private static final int N15 = 15;
     /**
      * altura del de la finestra.
      */
@@ -65,28 +65,43 @@ public class CampBatalla extends GraphicsProgram {
      */
     public final void play(final Exercit roma, final Exercit mitics) {
         while (roma.getSoldats().size() > 0 && mitics.getSoldats().size() > 0) {
+
             boolean atakar = roma.atacar();
             if (atakar) {
-                int minSldts = Math.min(roma.getSoldats().size(),
-                        mitics.getSoldats().size());
-                //"Han arribat"
-                roma.changeDireccio();
-                roma.formarExercit(minSldts);
+                if (roma.getSoldats().size() < N8
+                        && mitics.getSoldats().size() < N8) {
+                    int minSldts = Math.min(roma.getSoldats().size(),
+                            mitics.getSoldats().size());
+                    roma.changeDireccio();
+                    roma.formarExercit(minSldts);
+                } else {
+                    roma.changeDireccio();
+                }
+
             }
             roma.comprovarMorts(mitics);
 
             boolean atakarOponent = mitics.atacar();
             if (atakarOponent) {
-                int minSldts = Math.min(roma.getSoldats().size(),
-                        mitics.getSoldats().size());
-                //"Han arribat"
-                mitics.changeDireccio();
-                mitics.formarExercit(minSldts);
+                if (roma.getSoldats().size() < N8
+                        && mitics.getSoldats().size() < N8) {
+                    int minSldts = Math.min(roma.getSoldats().size(),
+                            mitics.getSoldats().size());
+                    //"Han arribat"
+                    mitics.changeDireccio();
+                    mitics.formarExercit(minSldts);
+                } else {
+                    mitics.changeDireccio();
+                }
             }
             mitics.comprovarMorts(roma);
             this.pause(N50);
         }
     }
+    /**
+     * numero 8.
+     */
+    private static final int N8 = 8;
     /**
      * numero 50.
      */
