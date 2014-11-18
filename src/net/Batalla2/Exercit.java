@@ -7,6 +7,8 @@ package net.Batalla2;
 
 import java.util.ArrayList;
 import java.util.Random;
+import jdk.internal.org.objectweb.asm.Opcodes;
+import jdk.nashorn.internal.runtime.ScriptRuntime;
 
 /**
  *
@@ -17,7 +19,7 @@ public class Exercit {
     /**
      * Guarda tots el soldats.
      */
-    private final ArrayList<Soldat> exercit;
+    private final ArrayList<SoldatGeneral> exercit;
     /**
      * crea enters aleatoris.
      */
@@ -47,7 +49,8 @@ public class Exercit {
      * @param pos si volem un soldat especific apartir de la posicio
      * @return retorna el soldat de la posicio
      */
-    public final Soldat getObtenirSoldat(final int pos) {
+    public final Object getObtenirSoldat(final int pos) {
+
         return exercit.get(pos);
     }
 
@@ -55,7 +58,7 @@ public class Exercit {
      *
      * @return la array amb tots els soldats.
      */
-    public final ArrayList<Soldat> getSoldats() {
+    public final ArrayList<SoldatGeneral> getSoldats() {
         return exercit;
     }
 
@@ -63,7 +66,7 @@ public class Exercit {
      *
      * @param nouSoldat va afegint soldats a l'array
      */
-    public final void afegirSoldat(final Soldat nouSoldat) {
+    public final void afegirSoldat(final SoldatGeneral nouSoldat) {
         exercit.add(nouSoldat);
     }
 
@@ -81,18 +84,23 @@ public class Exercit {
         int count = 0;
         for (int i = 0; i < files.length; i++) {
             for (int j = 0; j < files[i]; j++) {
+
                 if (count < exercit.size()) {
-                    double h = i * exercit.get(count).getHeight() + i * N15;
-                    double w;
-                    if (exercit.get(count).getbandol() > 0) {
-                        w = exercit.get(count).getWidth() * j;
-                    } else {
-                        double formEsque = canvasWidth
-                                - exercit.get(count).getWidth();
-                        w = formEsque - (exercit.get(count).getWidth() * j);
+                    if (exercit.get(count) instanceof Soldat) {
+                        double h = i * exercit.get(count).getHeight() + i * N15;
+                        double w;
+                        if (exercit.get(count).getbandol() > 0) {
+                            w = exercit.get(count).getWidth() * j;
+                        } else {
+                            double formEsque = canvasWidth
+                                    - exercit.get(count).getWidth();
+                            w = formEsque - (exercit.get(count).getWidth() * j);
+                        }
+                        exercit.get(count).formar(w, h);
+                        count++;
+                    } else if (exercit.get(count) instanceof Rey) {
+                        exercit.get(count).formar(0, 0);
                     }
-                    exercit.get(count).formar(w, h);
-                    count++;
                 }
             }
         }
@@ -101,6 +109,7 @@ public class Exercit {
      * numero 15.
      */
     private static final int N15 = 15;
+
     /**
      *
      * @return false si tots els soldats encara es poden moure i true si jan han
@@ -110,34 +119,38 @@ public class Exercit {
         double desti;
         int totalMoguts = 0;
         for (int i = 0; i < exercit.size(); i++) {
-            if (exercit.get(i).getbandol() > 0) {
-                //dreta
-                desti = canvasWidth - exercit.get(i).getWidth();
-            } else {
-                //esquerra
-                desti = 0;
+            if (exercit.get(i) instanceof Soldat) {
+                if (exercit.get(i).getbandol() > 0) {
+                    //dreta
+                    desti = canvasWidth - exercit.get(i).getWidth();
+                } else {
+                    //esquerra
+                    desti = 0;
+                }
+                totalMoguts += exercit.get(i).moure(desti);
+                if (totalMoguts == 0) {
+                    hanArribat = true;
+                } else {
+                    hanArribat = false;
+                }
+            } else if (exercit.get(i) instanceof Rey) {
+                
             }
-            totalMoguts += exercit.get(i).moure(desti);
-            if (totalMoguts == 0) {
-                hanArribat = true;
-            } else {
-                hanArribat = false;
-            }
+            //return hanArribat;
         }
         return hanArribat;
     }
 
     /**
      *
-     * @param exOponent el seguent exercit amb el que es compara si han
-     * xucat
+     * @param exOponent el seguent exercit amb el que es compara si han xucat
      */
     public final void comprovarMorts(final Exercit exOponent) {
         for (int i = 0; i < exercit.size(); i++) {
             for (int j = 0; j < exOponent.getSoldats().size(); j++) {
                 if (exercit.get(i).intersecta(exOponent.getSoldats().get(j))) {
-                    exOponent.getObtenirSoldat(j).setImg("exp.png");
-                    exOponent.getObtenirSoldat(j).borrarImatge();
+                    exOponent.getSoldats().get(j).setImg("exp.png");
+                    exOponent.getSoldats().get(j).borrarImatge();
                     exOponent.getSoldats().remove(j);
                 }
             }
@@ -148,7 +161,7 @@ public class Exercit {
      * canvia la direccio de al soldat perque vagi en sentit contrari.
      */
     public final void changeDireccio() {
-        for (Soldat sldt : exercit) {
+        for (SoldatGeneral sldt : exercit) {
             int tmp = sldt.getbandol() * -1;
             sldt.setbandol(tmp);
         }
