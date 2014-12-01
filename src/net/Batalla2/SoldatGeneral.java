@@ -33,15 +33,15 @@ public abstract class SoldatGeneral {
      */
     private int bandol;
     private double widthCanvas;
+    double h;
+    double w;
 
-
-    public SoldatGeneral() {
+ public SoldatGeneral() {
         bandol = 0;
         img = null;
         r = new Random();
         this.widthCanvas = 0;
     }
-
     /**
      * canvia la imatge del soldat.
      *
@@ -156,6 +156,7 @@ public abstract class SoldatGeneral {
      * apatir de un punt que li indikem la image avançara fins arribari.
      *
      * @param desti el punt fins al que te que arribari el soldat
+     * @return 
      */
     public abstract int moure(final double desti);
 
@@ -174,5 +175,20 @@ public abstract class SoldatGeneral {
     public final void borrarImatge() {
         img.getParent().remove(img);
         img = null;
+    }
+        public void flipHoriz() {
+
+        int[][] array = getImg().getPixelArray();
+        int height = array.length;
+        int width = array[0].length;
+        for (int y = 0; y < height; y++) {
+            for (int x1 = 0; x1 < width / 2; x1++) {
+                int x2 = width - x1 - 1;
+                int temp = array[y][x1];
+                array[y][x1] = array[y][x2];
+                array[y][x2] = temp;
+            }
+        }
+        getImg().setImage(new GImage(array).getImage());
     }
 }

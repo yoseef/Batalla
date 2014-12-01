@@ -8,7 +8,6 @@ package net.Batalla2;
 import acm.graphics.GImage;
 import java.util.Random;
 
-
 /**
  *
  * @author user
@@ -16,9 +15,9 @@ import java.util.Random;
 public class Soldat extends SoldatGeneral {
 
     public Soldat(final GImage imatge, final int b) {
-        super.setbandol(b);
-        super.setImg(imatge); 
-        super.r = new Random();
+       setbandol(b);
+        setImg(imatge);
+        r = new Random();
     }
 
     /**
@@ -27,20 +26,21 @@ public class Soldat extends SoldatGeneral {
      * @param desti el punt fins al que te que arribari el soldat
      * @return 1 en cas de haver avançat 0 en cas de no haver avançat
      */
-    
     @Override
-    public final int moure(final double desti) {   
-           
+    public final int moure(final double desti) {
+
         if (getbandol() > 0 && getX() <= desti) {
             setVelo();
-            super.getImg().move(getbandol() * getVelo(), 0);            
+            getImg().move(getbandol() * getVelo(), 0);
             return 1;
         } else if (getbandol() < 0 && getX() >= 0) {
             setVelo();
-            super.getImg().move(getbandol() * getVelo(), 0);             
+            getImg().move(getbandol() * getVelo(), 0);
             return 1;
         } else {
+            
             return 0;
         }
     }
+
 }
