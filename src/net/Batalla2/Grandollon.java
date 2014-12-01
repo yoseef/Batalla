@@ -12,15 +12,26 @@ import acm.graphics.GImage;
  * @author user
  */
 public class Grandollon extends SoldatGeneral {
-    int vidas;
 
+    /**
+     * numero de vidas que tindra aquest tipus de soldat.
+     */
+    private final int vidas;
+
+    /**
+     * Construeix un soldat de tipus gordo.
+     *
+     * @param imatge la imatge per crearlo
+     * @param b el bandol corresponent del soldat
+     */
     public Grandollon(final GImage imatge, final int b) {
         setbandol(b);
         setImg(imatge);
+        vidas = 0;
     }
 
     @Override
-    public int moure(double desti) {
+    public final int moure(final double desti) {
         if (getbandol() > 0 && getX() <= desti) {
             setVelo();
             getImg().move(getbandol() * getVelo(), 0);
@@ -29,9 +40,8 @@ public class Grandollon extends SoldatGeneral {
             setVelo();
             getImg().move(getbandol() * getVelo(), 0);
             return 1;
-        } else {            
+        } else {
             return 0;
         }
     }
-
 }

@@ -60,15 +60,15 @@ public class Exercit {
     }
 
     /**
-     *
-     * @param nouSoldat va afegint soldats a l'array
+     * va afegint soldats a l'array.
+     * @param nouSoldat soldat per allistar a l'exercit
      */
     public final void afegirSoldat(final SoldatGeneral nouSoldat) {
         exercit.add(nouSoldat);
     }
 
     /**
-     *
+     * coloca l'exercit en posicio correcte.
      * @param numFiles fer la formacio apartir del numero de files
      */
     public final void formarExercit(final int numFiles) {
@@ -87,7 +87,8 @@ public class Exercit {
                         if (exercit.get(count).getbandol() > 0) {
                             exercit.get(count).formar(0, 0);
                         } else {
-                            exercit.get(count).formar(0, canvasWidth - exercit.get(count).w);
+                            exercit.get(count).formar(0, canvasWidth
+                                    - exercit.get(count).getWidth());
                         }
                         count++;
                     } else if (exercit.get(count) instanceof Grandollon) {

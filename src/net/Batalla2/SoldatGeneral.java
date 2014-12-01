@@ -18,7 +18,15 @@ public abstract class SoldatGeneral {
     /**
      * crea enters aleatoris.
      */
-    public Random r;
+    private Random r;
+
+    public Random getR() {
+        return r;
+    }
+
+    public void setR(Random r) {
+        this.r = r;
+    }
     /**
      * la imatge del soldat.
      */
@@ -32,16 +40,25 @@ public abstract class SoldatGeneral {
      * dreta) o menys u(si va cap a l'esquerra)
      */
     private int bandol;
-    private double widthCanvas;
-    double h;
-    double w;
+    /**
+     * amplada del canvas.
+     */
+    private double w;
+    /**
+     * alçada del canvas.
+     */
+    private double h;
 
- public SoldatGeneral() {
+    /**
+     * Constructor per defecte.
+     */
+    public SoldatGeneral() {
         bandol = 0;
         img = null;
         r = new Random();
-        this.widthCanvas = 0;
+        this.w = 0;
     }
+
     /**
      * canvia la imatge del soldat.
      *
@@ -51,20 +68,59 @@ public abstract class SoldatGeneral {
         img.setImage(ruta);
     }
 
-    public final void setImg(GImage img2) {
+    /**
+     * setter de la imatge.
+     *
+     * @param img2 image
+     */
+    public final void setImg(final GImage img2) {
         img = img2;
     }
 
-    public final void setLocation(double x, double y) {
+    /**
+     * setter de location.
+     *
+     * @param x que tindra l'objecte
+     * @param y que tindra
+     */
+    public final void setLocation(final double x, final double y) {
         img.setLocation(x, y);
     }
 
-    public void setWidthCanvas(double widthCanvas) {
-        this.widthCanvas = widthCanvas;
+    /**
+     * setter amplada del canvas.
+     *
+     * @param widthCanvas amplada
+     */
+    public final void setWidthCanvas(final double widthCanvas) {
+        this.w = widthCanvas;
     }
 
-    public double getWidthCanvas() {
-        return widthCanvas;
+    /**
+     * obte lampladad el canvas.
+     *
+     * @return amplada
+     */
+    public final double getWidthCanvas() {
+        return w;
+    }
+
+    /**
+     * obte l'alçada del canvas.
+     *
+     * @return alçada del canvas
+     */
+    public final double getHeigthCanvas() {
+        return h;
+    }
+
+    /**
+     * canvia el valor de l'alçada.
+     *
+     * @param heigth alçada
+     */
+    public final void setHeigthCanvas(final double heigth) {
+        h = heigth;
     }
 
     /**
@@ -115,10 +171,20 @@ public abstract class SoldatGeneral {
         return img.getBounds();
     }
 
+    /**
+     * obte la imatge.
+     *
+     * @return la imatge
+     */
     public final GImage getImg() {
         return img;
     }
 
+    /**
+     * obte la velocitat.
+     *
+     * @return la veloc
+     */
     public final int getVelo() {
         return velocitat;
     }
@@ -134,7 +200,7 @@ public abstract class SoldatGeneral {
     /**
      * propociona una velocitat al soldat (aleatoria).
      */
-    public void setVelo() {
+    public final void setVelo() {
         velocitat = r.nextInt(N10);
     }
     /**
@@ -156,7 +222,7 @@ public abstract class SoldatGeneral {
      * apatir de un punt que li indikem la image avançara fins arribari.
      *
      * @param desti el punt fins al que te que arribari el soldat
-     * @return 
+     * @return numero 1 s'ha mogut sino 0
      */
     public abstract int moure(final double desti);
 
@@ -166,7 +232,8 @@ public abstract class SoldatGeneral {
      * @return true si el rectangle del primer toca el el rectangle del segon
      */
     public final boolean intersecta(final SoldatGeneral soldat2) {
-        return this.getRectangleSoldat().intersects(soldat2.getRectangleSoldat());
+        return this.getRectangleSoldat().intersects(
+                soldat2.getRectangleSoldat());
     }
 
     /**
@@ -176,7 +243,11 @@ public abstract class SoldatGeneral {
         img.getParent().remove(img);
         img = null;
     }
-        public void flipHoriz() {
+
+    /**
+     * gira les imatges.
+     */
+    public final void flipHoriz() {
 
         int[][] array = getImg().getPixelArray();
         int height = array.length;

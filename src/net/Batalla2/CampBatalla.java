@@ -37,16 +37,16 @@ public class CampBatalla extends GraphicsProgram {
         }
         img = new GImage("img/H.png");
         this.add(img, 0, 0);
-        romans.afegirSoldat(new Heroi(img, direc, this.getWidth(), this.getHeight()));
+        romans.afegirSoldat(new Heroi(img, direc, this.getWidth(),
+                this.getHeight()));
 
         img = new GImage("img/K.png");
         this.add(img, 0, 0);
-        romans.afegirSoldat(new Rey(img, direc, this.getWidth(), this.getHeight()));        
-        
+        romans.afegirSoldat(new Rey(img, direc, this.getWidth(),
+                this.getHeight()));
         img = new GImage("img/Grand.png");
         this.add(img, 0, 0);
-        romans.afegirSoldat(new Grandollon(img, direc));        
-        
+        romans.afegirSoldat(new Grandollon(img, direc));
         romans.formarExercit(numFiles);
 
         Exercit mitics = new Exercit(this.getWidth());
@@ -58,26 +58,23 @@ public class CampBatalla extends GraphicsProgram {
         }
         img = new GImage("img/H2.png");
         this.add(img, 0, 0);
-        mitics.afegirSoldat(new Heroi(img, -direc, this.getWidth(), this.getHeight()));
-        
-        
+        mitics.afegirSoldat(new Heroi(img, -direc, this.getWidth(),
+                this.getHeight()));
         img = new GImage("img/K2.png");
         this.add(img, 0, 0);
-        mitics.afegirSoldat(new Rey(img, -direc, this.getWidth(), this.getHeight()));
-        
+        mitics.afegirSoldat(new Rey(img, -direc, this.getWidth(),
+                this.getHeight()));
         img = new GImage("img/Grand2.png");
         this.add(img, 0, 0);
         mitics.afegirSoldat(new Grandollon(img, -direc));
-        
         mitics.formarExercit(numFiles);
-        
-        clicaPerComencar();        
+        clicaPerComencar();
         play(romans, mitics);
     }
     /**
      * numero de soldats que volem tenir.
      */
-    private static final int N15 = 10;
+    private static final int N15 = 15;
     /**
      * altura del de la finestra.
      */
@@ -127,13 +124,15 @@ public class CampBatalla extends GraphicsProgram {
             this.pause(N50);
         }
     }
-
+    /**
+     * Mostra una etiqueta, i espera fins que es cliqui.
+     */
     private void clicaPerComencar() {
         GLabel label = new GLabel("Clica per començar");
         double x = (getWidth() - label.getWidth()) / 2;
         double y = (getHeight() + label.getAscent()) / 2;
         add(label, x, y);
-        waitForClick();  
+        waitForClick();
         remove(label);
     }
     /**

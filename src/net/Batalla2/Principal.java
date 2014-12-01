@@ -9,7 +9,7 @@ package net.Batalla2;
  *
  * @author user
  */
-public class Principal {
+public class Principal {   
 
     public static void main(String args[]) {
         CampBatalla cb = new CampBatalla();

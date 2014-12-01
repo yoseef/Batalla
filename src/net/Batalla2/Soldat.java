@@ -13,11 +13,15 @@ import java.util.Random;
  * @author user
  */
 public class Soldat extends SoldatGeneral {
-
+    /**
+     * Crea un soldat normal.
+     * @param imatge imatge per crear un soldat
+     * @param b bandol corresponent
+     */
     public Soldat(final GImage imatge, final int b) {
        setbandol(b);
         setImg(imatge);
-        r = new Random();
+        setR(new Random());
     }
 
     /**
@@ -28,7 +32,6 @@ public class Soldat extends SoldatGeneral {
      */
     @Override
     public final int moure(final double desti) {
-
         if (getbandol() > 0 && getX() <= desti) {
             setVelo();
             getImg().move(getbandol() * getVelo(), 0);
@@ -38,7 +41,6 @@ public class Soldat extends SoldatGeneral {
             getImg().move(getbandol() * getVelo(), 0);
             return 1;
         } else {
-            
             return 0;
         }
     }

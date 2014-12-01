@@ -12,16 +12,22 @@ import acm.graphics.GImage;
  * @author user
  */
 public class Heroi extends SoldatGeneral {
-
-    public Heroi(final GImage imatge, final int b, double widthCanvas, double heightCanvas) {
+    /**
+     * construeix un nou soldat de tipus heroi.
+     * @param imatge la imatge del soldat
+     * @param b bandol correponent
+     * @param widthCanvas amplada canvas
+     * @param heightCanvas alçada canvas
+     */
+    public Heroi(final GImage imatge, final int b, final double widthCanvas,
+            final double heightCanvas) {
         setbandol(b);
         setImg(imatge);
-        h = heightCanvas;
-        w = widthCanvas;
-    }    
-
+        setHeigthCanvas(heightCanvas);
+        setWidthCanvas(widthCanvas);
+    }
     @Override
-    public int moure(double desti) {
+    public final int moure(final double desti) {
         if (getbandol() > 0) {
             setVelo();
             getImg().move(getVelo(), getVelo());
@@ -32,5 +38,4 @@ public class Heroi extends SoldatGeneral {
         }
         return 0;
     }
-
 }
